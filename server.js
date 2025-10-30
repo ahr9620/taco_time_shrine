@@ -79,19 +79,21 @@ async function initDatabase() {
   try {
     mongoClient = new MongoClient(MONGODB_URI);
     await mongoClient.connect();
-    db = mongoClient.db();
+    // Prefer explicit DB name if provided via env; otherwise use the name from URI (or driver default)
+    db = process.env.MONGODB_DB ? mongoClient.db(process.env.MONGODB_DB) : mongoClient.db();
     
     console.log('MongoDB connected successfully');
     
-    // Create unique index on session_id
+    // Ensure indexes
     const collection = db.collection('offerings');
-    await collection.createIndex({ session_id: 1 }, { unique: true });
+    await collection.createIndex({ id: 1 }, { unique: true });
+    await collection.createIndex({ sessionId: 1 }, { unique: true });
     await collection.createIndex({ timestamp: -1 });
     
     // Load active sessions from database
     try {
-      const sessions = await collection.distinct('session_id');
-      sessions.forEach(sessionId => activeSessions.add(sessionId));
+      const sessionsFromDb = await collection.distinct('sessionId');
+      sessionsFromDb.forEach(sessionId => activeSessions.add(sessionId));
       console.log(`Loaded ${activeSessions.size} existing sessions from database`);
       
       // Load all offerings into memory
