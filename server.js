@@ -24,6 +24,12 @@ const MONGODB_URI = process.env.MONGODB_URI;
 let mongoClient = null;
 let db = null;
 
+// Debug logging
+console.log('=== Environment Check ===');
+console.log('MONGODB_URI:', MONGODB_URI ? 'Present' : 'Missing');
+console.log('All env vars starting with MONGO:', Object.keys(process.env).filter(k => k.includes('MONGO')));
+console.log('======================');
+
 // In-memory cache for active sessions (for faster lookups)
 const activeSessions = new Set();
 
