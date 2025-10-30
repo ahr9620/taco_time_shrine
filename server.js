@@ -64,21 +64,29 @@ async function initDatabase() {
     `);
     
     // Create indexes if they don't exist
-    await client.query('CREATE INDEX IF NOT EXISTS idx_session_id ON offerings(session_id)');
-    await client.query('CREATE INDEX IF NOT EXISTS idx_timestamp ON offerings(timestamp)');
-    await client.query('CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_session ON offerings(session_id)');
-    
-    console.log('Database table and indexes created/verified');
+    try {
+      await client.query('CREATE INDEX IF NOT EXISTS idx_session_id ON offerings(session_id)');
+      await client.query('CREATE INDEX IF NOT EXISTS idx_timestamp ON offerings(timestamp)');
+      await client.query('CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_session ON offerings(session_id)');
+      console.log('Database table and indexes created/verified');
+    } catch (idxErr) {
+      console.log('Index creation skipped (might already exist):', idxErr.message);
+    }
     
     client.release();
     
     // Load active sessions from database
-    const result = await pool.query('SELECT DISTINCT session_id FROM offerings');
-    result.rows.forEach(row => activeSessions.add(row.session_id));
-    console.log(`Loaded ${activeSessions.size} existing sessions from database`);
+    try {
+      const result = await pool.query('SELECT DISTINCT session_id FROM offerings');
+      result.rows.forEach(row => activeSessions.add(row.session_id));
+      console.log(`Loaded ${activeSessions.size} existing sessions from database`);
+    } catch (queryErr) {
+      console.log('Could not load existing sessions:', queryErr.message);
+    }
   } catch (err) {
-    console.error('Database connection error:', err);
-    console.log('Falling back to in-memory storage');
+    console.error('Database connection error:', err.message);
+    console.log('Server will use in-memory storage for now');
+    // Don't prevent server from starting
   }
 }
 
