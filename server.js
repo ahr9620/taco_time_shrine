@@ -4,13 +4,8 @@ const socketIo = require('socket.io');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
-// Optional: Only require pg if available
-let Pool;
-try {
-  Pool = require('pg').Pool;
-} catch (e) {
-  console.log('pg module not found, running in in-memory mode');
-}
+// Require pg
+const { Pool } = require('pg');
 
 const app = express();
 const server = http.createServer(app);
@@ -24,7 +19,7 @@ const io = socketIo(server, {
 const PORT = process.env.PORT || 3000;
 
 // Database connection pool
-const pool = (Pool && process.env.DATABASE_URL) ? new Pool({
+const pool = process.env.DATABASE_URL ? new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
   max: 20,
