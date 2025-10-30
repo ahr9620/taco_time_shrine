@@ -171,10 +171,11 @@ io.on('connection', (socket) => {
   console.log('New visitor connected:', socket.id);
   
   // Send existing offerings to new visitor
-  if (pool) {
-    pool.query('SELECT * FROM offerings ORDER BY timestamp DESC')
+  if (db) {
+    const collection = db.collection('offerings');
+    collection.find({}).sort({ timestamp: -1 }).toArray()
       .then(result => {
-        socket.emit('existing-offerings', result.rows);
+        socket.emit('existing-offerings', result);
       })
       .catch(err => {
         console.error('Error fetching offerings:', err);
