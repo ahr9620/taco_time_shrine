@@ -116,7 +116,7 @@ function initializeEventListeners() {
         };
 
         // Show form modal
-        offeringModal.style.display = 'block';
+        offeringModal.style.display = 'flex';
     }
     
     // Try to attach click handler to background

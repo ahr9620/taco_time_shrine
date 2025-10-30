@@ -393,6 +393,8 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
 }
 
 .modal-content {
@@ -703,12 +705,6 @@ body {
         padding: 20px;
         width: calc(95% - 40px);
         max-width: calc(500px - 40px);
-    }
-    
-    .offeringModal {
-        display: flex;
-        align-items: center;
-        justify-content: center;
     }
     
     .modal-content h3 {
