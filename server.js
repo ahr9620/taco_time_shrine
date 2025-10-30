@@ -119,8 +119,12 @@ async function initDatabase() {
       console.log('Could not load existing sessions:', queryErr.message);
     }
   } catch (err) {
-    console.error('MongoDB connection error:', err.message);
-    console.error('Full error:', err);
+    console.error('=== MongoDB Connection Failed ===');
+    console.error('Error message:', err.message);
+    console.error('Error name:', err.name);
+    console.error('Error code:', err.code);
+    console.error('Full error:', JSON.stringify(err, Object.getOwnPropertyNames(err)));
+    console.error('=================================');
     console.log('Server will use in-memory storage for now');
   }
 }
