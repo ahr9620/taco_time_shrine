@@ -71,6 +71,7 @@ loadFromFile();
 
 // Initialize MongoDB connection
 async function initDatabase() {
+  console.log('MONGODB_URI present:', !!MONGODB_URI);
   if (!MONGODB_URI) {
     console.log('Running in in-memory mode (no MongoDB configured)');
     return;
