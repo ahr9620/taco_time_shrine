@@ -514,7 +514,6 @@ body {
     max-width: 450px;
     width: 90%;
     animation: popupSlideIn 0.3s ease;
-    position: relative;
 }
 
 @keyframes popupSlideIn {
@@ -700,10 +699,16 @@ body {
     }
     
     .modal-content {
-        margin: 5% auto;
+        margin: 0 auto;
         padding: 20px;
         width: calc(95% - 40px);
         max-width: calc(500px - 40px);
+    }
+    
+    .offeringModal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .modal-content h3 {
@@ -713,7 +718,17 @@ body {
     .popup-content {
         padding: 20px;
         max-width: calc(90% - 40px);
-        margin: 0 20px;
+        width: calc(90% - 40px);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) !important;
+    }
+    
+    .offering-popup {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .form-actions {
