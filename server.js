@@ -77,8 +77,11 @@ async function initDatabase() {
   }
   
   try {
+    console.log('Attempting to connect to MongoDB...');
     mongoClient = new MongoClient(MONGODB_URI);
     await mongoClient.connect();
+    console.log('MongoDB client connected');
+    
     // Extract database name from connection string or use default
     const urlParts = new URL(MONGODB_URI);
     const dbName = urlParts.pathname.substring(1) || 'tacotime'; // Remove leading slash, default to 'tacotime'
@@ -110,6 +113,7 @@ async function initDatabase() {
     }
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
+    console.error('Full error:', err);
     console.log('Server will use in-memory storage for now');
   }
 }
@@ -214,10 +218,11 @@ io.on('connection', (socket) => {
         await collection.insertOne(offering);
         activeSessions.add(sessionId);
         offerings.set(offering.id, offering);
-        console.log('Offering saved to MongoDB');
+        console.log('Offering saved to MongoDB successfully');
         io.emit('new-offering', offering);
       } catch (err) {
-        console.error('Error saving offering:', err);
+        console.error('Error saving offering to MongoDB:', err.message);
+        console.error('Full error:', err);
         socket.emit('offering-error', { message: 'Failed to save offering' });
       }
     } else {
