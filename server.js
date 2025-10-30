@@ -49,6 +49,32 @@ async function initDatabase() {
   try {
     const client = await pool.connect();
     console.log('Database connected successfully');
+    
+    // Create table if it doesn't exist
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS offerings (
+        id VARCHAR(255) PRIMARY KEY,
+        session_id VARCHAR(255) NOT NULL,
+        image VARCHAR(255) NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        x DECIMAL(10, 2) NOT NULL,
+        y DECIMAL(10, 2) NOT NULL,
+        visitor_name VARCHAR(255) NOT NULL,
+        age VARCHAR(50),
+        location VARCHAR(255),
+        message TEXT,
+        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
+    // Create indexes if they don't exist
+    await client.query('CREATE INDEX IF NOT EXISTS idx_session_id ON offerings(session_id)');
+    await client.query('CREATE INDEX IF NOT EXISTS idx_timestamp ON offerings(timestamp)');
+    await client.query('CREATE UNIQUE INDEX IF NOT EXISTS idx_unique_session ON offerings(session_id)');
+    
+    console.log('Database table and indexes created/verified');
+    
     client.release();
     
     // Load active sessions from database
