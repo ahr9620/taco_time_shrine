@@ -24,9 +24,9 @@ const MONGODB_URI = process.env.MONGODB_URI;
 let mongoClient = null;
 let db = null;
 
-// Debug logging
+// Debug logging (note: MONGODB_URI might be empty if not yet read from process.env)
 console.log('=== Environment Check ===');
-console.log('MONGODB_URI:', MONGODB_URI ? 'Present' : 'Missing');
+console.log('MONGODB_URI defined:', !!process.env.MONGODB_URI);
 console.log('All env vars starting with MONGO:', Object.keys(process.env).filter(k => k.includes('MONGO')));
 console.log('======================');
 
