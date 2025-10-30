@@ -85,7 +85,13 @@ async function initDatabase() {
   
   try {
     console.log('Attempting to connect to MongoDB...');
-    mongoClient = new MongoClient(MONGODB_URI);
+    mongoClient = new MongoClient(MONGODB_URI, {
+      // Add connection options for better compatibility
+      serverSelectionTimeoutMS: 5000,
+      ssl: true,
+      tls: true,
+      tlsAllowInvalidCertificates: false
+    });
     await mongoClient.connect();
     console.log('MongoDB client connected');
     
