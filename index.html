@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taco Time Shrine - Digital Altar</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="altar-container">
+        <!-- Background Image -->
+        <div class="altar-background"></div>
+        
+        <!-- Page Footer -->
+        <div class="page-footer">
+            <div class="footer-star-left">✦</div>
+            <div class="footer-star-right">✦</div>
+            <h2 class="footer-title">Taco Time Digital Altar</h2>
+        </div>
+        
+        <!-- Offerings Container -->
+        <div class="offerings-container" id="offeringsContainer"></div>
+        
+        <!-- Introduction Panel -->
+        <div class="intro-panel" id="introPanel">
+            <button class="minimize-btn" id="minimizeIntro">−</button>
+            <div class="panel-label">ABOUT</div>
+            <div class="panel-corner-top-left">✦</div>
+            <div class="panel-corner-bottom-left">✦</div>
+            <div class="panel-corner-bottom-right">✦</div>
+            <div class="intro-content">
+                <p>As many of you may have heard, <strong>Taco Time NW in Gig Harbor, WA is closing.</strong> This was a community establishment where we all dined and created memories.</p>
+                <p>To honor this loss, I invite you to leave an offering with a note in this digital space.</p>
+                <p class="signature">Taco Time Gig Harbor may be gone, but it will forever be in our hearts. ❤️</p>
+            </div>
+        </div>
+        
+        <!-- Emoji Selection Panel -->
+        <div class="emoji-panel" id="emojiPanel">
+            <button class="minimize-btn" id="minimizeOffering">−</button>
+            <div class="panel-label">OFFERING</div>
+            <div class="panel-corner-top-left">✦</div>
+            <div class="panel-corner-bottom-left">✦</div>
+            <div class="panel-corner-bottom-right">✦</div>
+            <h3>CHOOSE YOUR OFFERING</h3>
+            <div class="offering-options">
+                <button class="offering-btn" data-image="bowl.avif" data-name="Bowl">
+                    <img src="bowl.avif" alt="Bowl" class="offering-preview">
+                </button>
+                <button class="offering-btn" data-image="chile.avif" data-name="Chile">
+                    <img src="chile.avif" alt="Chile" class="offering-preview">
+                </button>
+                <button class="offering-btn" data-image="taco.avif" data-name="Taco">
+                    <img src="taco.avif" alt="Taco" class="offering-preview">
+                </button>
+                <button class="offering-btn" data-image="meal.avif" data-name="Meal">
+                    <img src="meal.avif" alt="Meal" class="offering-preview">
+                </button>
+                <button class="offering-btn" data-image="tots.avif" data-name="Tots">
+                    <img src="tots.avif" alt="Tots" class="offering-preview">
+                </button>
+            </div>
+            <p class="instruction">Click anywhere on the altar to leave a message with your offering</p>
+        </div>
+        
+        <!-- Offering Form Modal -->
+        <div class="modal" id="offeringModal">
+            <div class="modal-content">
+                <h3>Leave Your Offering</h3>
+                <form id="offeringForm">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age:</label>
+                        <input type="number" id="age" name="age" min="1" max="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" id="location" name="location" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea id="message" name="message" rows="3" placeholder="Share your thoughts or prayers..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="cancelBtn">Cancel</button>
+                        <button type="submit">Place Offering</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Offering Info Popup -->
+        <div class="offering-popup" id="offeringPopup">
+            <div class="popup-content">
+                <div class="popup-corner-top-left">✦</div>
+                <div class="popup-corner-bottom-left">✦</div>
+                <div class="popup-corner-bottom-right">✦</div>
+                <button class="close-popup" id="closePopup">&times;</button>
+                <div class="popup-offering-image" id="popupOfferingImage"></div>
+                <div class="popup-body">
+                    <p><strong>Name:</strong> <span id="popupName"></span></p>
+                    <p><strong>Age:</strong> <span id="popupAge"></span></p>
+                    <p><strong>Location:</strong> <span id="popupLocation"></span></p>
+                    <p><strong>Message:</strong> <span id="popupMessage"></span></p>
+                    <p class="timestamp"><em>Placed: <span id="popupTimestamp"></span></em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

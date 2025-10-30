@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Altar</title>
+    <style>
+        body { margin: 0; padding: 20px; font-family: Arial; }
+        .test-area { 
+            width: 400px; 
+            height: 300px; 
+            background: #f0f0f0; 
+            border: 2px solid #333; 
+            position: relative;
+            cursor: crosshair;
+        }
+        .offering { 
+            position: absolute; 
+            font-size: 2rem; 
+            cursor: pointer; 
+        }
+        button { margin: 10px; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Test Altar Functionality</h1>
+    <button onclick="placeTestOffering()">Place Test Offering</button>
+    <button onclick="clearOfferings()">Clear All</button>
+    <div class="test-area" id="testArea"></div>
+    
+    <script>
+        function placeTestOffering() {
+            const testArea = document.getElementById('testArea');
+            const offering = document.createElement('div');
+            offering.className = 'offering';
+            offering.textContent = '🌯';
+            offering.style.left = '50%';
+            offering.style.top = '50%';
+            offering.style.transform = 'translate(-50%, -50%)';
+            testArea.appendChild(offering);
+            console.log('Test offering placed');
+        }
+        
+        function clearOfferings() {
+            const testArea = document.getElementById('testArea');
+            testArea.innerHTML = '';
+        }
+        
+        // Test click handler
+        document.getElementById('testArea').addEventListener('click', (e) => {
+            const rect = e.target.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            console.log('Clicked at:', x, y);
+            
+            const offering = document.createElement('div');
+            offering.className = 'offering';
+            offering.textContent = '🌮';
+            offering.style.left = x + '%';
+            offering.style.top = y + '%';
+            e.target.appendChild(offering);
+        });
+    </script>
+</body>
+</html>
