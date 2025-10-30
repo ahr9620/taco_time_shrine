@@ -133,12 +133,21 @@ app.get('/health', async (req, res) => {
   if (db) {
     try {
       await db.command({ ping: 1 });
-      res.status(200).json({ status: 'healthy', database: 'mongodb', timestamp: new Date().toISOString() });
+      res.status(200).json({ 
+        status: 'healthy', 
+        database: 'mongodb', 
+        timestamp: new Date().toISOString(),
+        hasMongoUri: !!process.env.MONGODB_URI
+      });
     } catch (err) {
       res.status(500).json({ status: 'unhealthy', error: err.message });
     }
   } else {
-    res.status(200).json({ status: 'healthy (in-memory)', timestamp: new Date().toISOString() });
+    res.status(200).json({ 
+      status: 'healthy (in-memory)', 
+      timestamp: new Date().toISOString(),
+      hasMongoUri: !!process.env.MONGODB_URI
+    });
   }
 });
 
