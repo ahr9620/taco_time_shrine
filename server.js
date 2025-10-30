@@ -265,9 +265,18 @@ initDatabase().then(() => {
     console.log(`Database: ${pool ? 'Connected' : 'In-memory mode'}`);
   });
 }).catch(err => {
-  console.error('Failed to initialize server:', err);
+  console.error('Failed to initialize database, starting in-memory mode:', err);
   // Start anyway in in-memory mode
   server.listen(PORT, () => {
     console.log(`Taco Time Shrine server running in in-memory mode on http://localhost:${PORT}`);
   });
+});
+
+// Catch unhandled errors
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled promise rejection:', err);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught exception:', err);
 });
