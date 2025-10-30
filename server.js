@@ -79,8 +79,11 @@ async function initDatabase() {
   try {
     mongoClient = new MongoClient(MONGODB_URI);
     await mongoClient.connect();
-    // Prefer explicit DB name if provided via env; otherwise use the name from URI (or driver default)
-    db = process.env.MONGODB_DB ? mongoClient.db(process.env.MONGODB_DB) : mongoClient.db();
+    // Extract database name from connection string or use default
+    const urlParts = new URL(MONGODB_URI);
+    const dbName = urlParts.pathname.substring(1) || 'tacotime'; // Remove leading slash, default to 'tacotime'
+    db = mongoClient.db(dbName);
+    console.log(`Using database: ${dbName}`);
     
     console.log('MongoDB connected successfully');
     
