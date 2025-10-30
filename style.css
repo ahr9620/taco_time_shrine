@@ -611,8 +611,10 @@ body {
 @media (max-width: 768px) {
     .page-footer {
         bottom: 10px;
+        left: 10px;
+        right: 10px;
         padding: 8px 20px;
-        max-width: calc(100% - 40px);
+        transform: none;
     }
     
     .footer-title {
@@ -682,7 +684,8 @@ body {
     .modal-content {
         margin: 5% auto;
         padding: 20px;
-        width: 95%;
+        width: calc(95% - 40px);
+        max-width: calc(500px - 40px);
     }
     
     .modal-content h3 {
@@ -691,7 +694,8 @@ body {
     
     .popup-content {
         padding: 20px;
-        max-width: 90%;
+        max-width: calc(90% - 40px);
+        margin: 0 20px;
     }
     
     .form-actions {
