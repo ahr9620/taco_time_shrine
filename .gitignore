@@ -7,6 +7,9 @@ package-lock.json
 .env.local
 .env.production
 
+# Data storage
+offerings.json
+
 # Logs
 *.log
 npm-debug.log*

@@ -2,10 +2,16 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const path = require('path');
+const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
-// Require pg
-const { Pool } = require('pg');
+// Require pg (optional, for PostgreSQL)
+let Pool;
+try {
+  Pool = require('pg').Pool;
+} catch (e) {
+  console.log('pg not installed, using JSON file storage');
+}
 
 const app = express();
 const server = http.createServer(app);
@@ -33,6 +39,44 @@ const activeSessions = new Set();
 // Fallback in-memory storage if no database
 const offerings = new Map();
 const sessions = new Set();
+
+// JSON file storage (simple, no database needed)
+const DATA_FILE = path.join(__dirname, 'offerings.json');
+
+function loadFromFile() {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const data = fs.readFileSync(DATA_FILE, 'utf8');
+      const parsed = JSON.parse(data);
+      
+      // Load offerings
+      parsed.offerings?.forEach(off => {
+        offerings.set(off.id, off);
+        sessions.add(off.sessionId);
+      });
+      
+      console.log(`Loaded ${offerings.size} offerings from file`);
+    }
+  } catch (err) {
+    console.log('No existing data file, starting fresh');
+  }
+}
+
+function saveToFile() {
+  try {
+    const data = {
+      offerings: Array.from(offerings.values()),
+      timestamp: new Date().toISOString()
+    };
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    console.log('Saved offerings to file');
+  } catch (err) {
+    console.error('Error saving to file:', err);
+  }
+}
+
+// Load existing data on startup
+loadFromFile();
 
 // Initialize database connection
 async function initDatabase() {
@@ -199,10 +243,14 @@ io.on('connection', (socket) => {
         socket.emit('offering-error', { message: 'Failed to save offering' });
       }
     } else {
-      // In-memory storage
+      // In-memory storage + save to JSON file
       offerings.set(offering.id, offering);
       sessions.add(sessionId);
       console.log('Total offerings now:', offerings.size);
+      
+      // Save to JSON file for persistence
+      saveToFile();
+      
       io.emit('new-offering', offering);
     }
   });
